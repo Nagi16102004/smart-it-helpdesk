@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block content %}
+<h3>My Assigned Tickets</h3>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Ticket #</th>
+            <th>Subject</th>
+            <th>Category</th>
+            <th>Priority</th>
+            <th>Status</th>
+            <th>Raised By</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for ticket in tickets %}
+        <tr>
+            <td>{{ ticket.ticket_number }}</td>
+            <td>{{ ticket.subject }}</td>
+            <td>{{ ticket.category }}</td>
+            <td>{{ ticket.priority }}</td>
+            <td>{{ ticket.status }}</td>
+            <td>{{ ticket.raised_by.name }}</td>
+            <td>
+                {% if ticket.status == 'Assigned' %}
+                <form method="POST" action="{{ url_for('start_progress', ticket_id=ticket.id) }}">
+                    <button type="submit" class="btn btn-sm btn-warning">Start Progress</button>
+                </form>
+                {% elif ticket.status == 'In Progress' %}
+                <a href="{{ url_for('resolve_ticket', ticket_id=ticket.id) }}" class="btn btn-sm btn-success">Resolve</a>
+                {% else %}
+                    —
+                {% endif %}
+            </td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="7" class="text-center">No tickets assigned to you.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block content %}
+<h3>Resolve Ticket {{ ticket.ticket_number }}</h3>
+<p><strong>Subject:</strong> {{ ticket.subject }}</p>
+<p><strong>Description:</strong> {{ ticket.description }}</p>
+
+<form method="POST">
+    <div class="mb-3">
+        <label>Resolution Notes</label>
+        <textarea name="resolution_notes" class="form-control" rows="4" required></textarea>
+    </div>
+    <button type="submit" class="btn btn-success">Mark as Resolved</button>
+</form>
+{% endblock %}

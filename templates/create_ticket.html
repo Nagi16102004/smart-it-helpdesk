@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block content %}
+<h3>Create Ticket</h3>
+<form method="POST">
+    <div class="mb-3">
+        <label>Subject</label>
+        <input type="text" name="subject" class="form-control" required>
+    </div>
+    <div class="mb-3">
+        <label>Description</label>
+        <textarea name="description" class="form-control" rows="4" required></textarea>
+    </div>
+    <div class="mb-3">
+        <label>Category</label>
+        <select name="category" class="form-control" required>
+            <option value="Hardware">Hardware</option>
+            <option value="Software">Software</option>
+            <option value="Network">Network</option>
+            <option value="Account/Login">Account/Login</option>
+            <option value="Email">Email</option>
+            <option value="Access/Permissions">Access/Permissions</option>
+            <option value="Application">Application</option>
+            <option value="Other">Other</option>
+        </select>
+    </div>
+    <div class="mb-3">
+        <label>Impact</label>
+        <select name="impact" class="form-control" required>
+            <option value="High">High</option>
+            <option value="Medium">Medium</option>
+            <option value="Low">Low</option>
+        </select>
+    </div>
+    <div class="mb-3">
+        <label>Urgency</label>
+        <select name="urgency" class="form-control" required>
+            <option value="High">High</option>
+            <option value="Medium">Medium</option>
+            <option value="Low">Low</option>
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit Ticket</button>
+</form>
+{% endblock %}

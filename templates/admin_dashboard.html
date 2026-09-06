@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% block content %}
+<h3>Admin Analytics Dashboard</h3>
+
+<div class="row mb-4">
+    <div class="col-md-2">
+        <div class="card text-center p-3">
+            <h6>Total Tickets</h6>
+            <h3>{{ kpis.total }}</h3>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="card text-center p-3">
+            <h6>Open</h6>
+            <h3>{{ kpis.open }}</h3>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="card text-center p-3">
+            <h6>In Progress</h6>
+            <h3>{{ kpis.in_progress }}</h3>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="card text-center p-3">
+            <h6>Resolved</h6>
+            <h3>{{ kpis.resolved }}</h3>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="card text-center p-3 bg-danger text-white">
+            <h6>SLA Breached</h6>
+            <h3>{{ kpis.sla_breached }}</h3>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <h6>Tickets by Category</h6>
+        <canvas id="categoryChart"></canvas>
+    </div>
+    <div class="col-md-4">
+        <h6>Tickets by Priority</h6>
+        <canvas id="priorityChart"></canvas>
+    </div>
+    <div class="col-md-4">
+        <h6>Tickets by Status</h6>
+        <canvas id="statusChart"></canvas>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+new Chart(document.getElementById('categoryChart'), {
+    type: 'bar',
+    data: {
+        labels: {{ category_labels | tojson }},
+        datasets: [{
+            label: 'Tickets',
+            data: {{ category_values | tojson }},
+            backgroundColor: '#0d6efd'
+        }]
+    }
+});
+
+new Chart(document.getElementById('priorityChart'), {
+    type: 'pie',
+    data: {
+        labels: {{ priority_labels | tojson }},
+        datasets: [{
+            data: {{ priority_values | tojson }},
+            backgroundColor: ['#dc3545', '#fd7e14', '#ffc107', '#198754']
+        }]
+    }
+});
+
+new Chart(document.getElementById('statusChart'), {
+    type: 'doughnut',
+    data: {
+        labels: {{ status_labels | tojson }},
+        datasets: [{
+            data: {{ status_values | tojson }},
+            backgroundColor: ['#6c757d', '#0dcaf0', '#ffc107', '#198754', '#20c997', '#dc3545']
+        }]
+    }
+});
+</script>
+{% endblock %}

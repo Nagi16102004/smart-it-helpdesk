@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block content %}
+<h3>My Tickets</h3>
+<a href="{{ url_for('create_ticket') }}" class="btn btn-primary mb-3">+ New Ticket</a>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Ticket #</th>
+            <th>Subject</th>
+            <th>Category</th>
+            <th>Priority</th>
+            <th>Status</th>
+            <th>Created At</th>
+            <th>Details</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for ticket in tickets %}
+        <tr>
+            <td>{{ ticket.ticket_number }}</td>
+            <td>{{ ticket.subject }}</td>
+            <td>{{ ticket.category }}</td>
+            <td>{{ ticket.priority }}</td>
+            <td>{{ ticket.status }}</td>
+            <td>{{ ticket.created_at.strftime('%d-%b-%Y %H:%M') }}</td>
+            <td>
+                <a href="{{ url_for('ticket_details', ticket_id=ticket.id) }}" class="btn btn-sm btn-info">View</a>
+                {% if ticket.status == 'Resolved' %}
+                <form method="POST" action="{{ url_for('reopen_ticket', ticket_id=ticket.id) }}" style="display:inline;">
+                    <button type="submit" class="btn btn-sm btn-warning">Reopen</button>
+                </form>
+                {% endif %}
+            </td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="7" class="text-center">No tickets found.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

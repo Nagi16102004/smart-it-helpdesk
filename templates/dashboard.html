@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+<h3>Welcome, {{ session['name'] }}</h3>
+<p>Role: {{ session['role'] }}</p>
+
+<a href="{{ url_for('create_ticket') }}" class="btn btn-primary">Create Ticket</a>
+<a href="{{ url_for('my_tickets') }}" class="btn btn-secondary">My Tickets</a>
+
+{% if session['role'] == 'admin' %}
+<a href="{{ url_for('admin_dashboard') }}" class="btn btn-outline-dark">Analytics Dashboard</a>
+<a href="{{ url_for('all_tickets') }}" class="btn btn-dark">All Tickets (Admin)</a>
+{% endif %}
+
+{% if session['role'] == 'agent' %}
+<a href="{{ url_for('agent_tickets') }}" class="btn btn-warning">My Assigned Tickets</a>
+{% endif %}
+
+{% if session['role'] in ['agent', 'admin'] %}
+<a href="{{ url_for('knowledge_base') }}" class="btn btn-info">Knowledge Base</a>
+{% endif %}
+
+<a href="{{ url_for('logout') }}" class="btn btn-danger">Logout</a>
+{% endblock %}

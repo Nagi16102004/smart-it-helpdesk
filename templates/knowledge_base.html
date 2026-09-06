@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block content %}
+<h3>Knowledge Base — Search Resolved Issues</h3>
+
+<form method="GET" class="mb-4">
+    <div class="input-group">
+        <input type="text" name="q" class="form-control" placeholder="Search by keyword (e.g. Wi-Fi, login, password)" value="{{ query or '' }}">
+        <button type="submit" class="btn btn-primary">Search</button>
+    </div>
+</form>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Ticket #</th>
+            <th>Category</th>
+            <th>Subject</th>
+            <th>Resolution</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for ticket in results %}
+        <tr>
+            <td>{{ ticket.ticket_number }}</td>
+            <td>{{ ticket.category }}</td>
+            <td>{{ ticket.subject }}</td>
+            <td>{{ ticket.resolution_notes }}</td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="4" class="text-center">No resolved issues found{% if query %} for "{{ query }}"{% endif %}.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

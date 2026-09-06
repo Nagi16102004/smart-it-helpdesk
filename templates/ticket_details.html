@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block content %}
+<h3>Ticket {{ ticket.ticket_number }}</h3>
+
+<table class="table table-bordered">
+    <tr><th>Subject</th><td>{{ ticket.subject }}</td></tr>
+    <tr><th>Description</th><td>{{ ticket.description }}</td></tr>
+    <tr><th>Category</th><td>{{ ticket.category }}</td></tr>
+    <tr><th>Priority</th><td>{{ ticket.priority }}</td></tr>
+    <tr><th>Status</th><td>{{ ticket.status }}</td></tr>
+    <tr><th>Raised By</th><td>{{ ticket.raised_by.name }}</td></tr>
+    <tr>
+        <th>Assigned Agent</th>
+        <td>{% if ticket.assigned_agent %}{{ ticket.assigned_agent.name }}{% else %}Not Assigned{% endif %}</td>
+    </tr>
+    {% if ticket.resolution_notes %}
+    <tr><th>Resolution Notes</th><td>{{ ticket.resolution_notes }}</td></tr>
+    {% endif %}
+</table>
+
+<h5>Activity History</h5>
+<ul class="list-group mb-4">
+    {% for h in history %}
+    <li class="list-group-item">
+        <strong>{{ h.created_at.strftime('%d-%b-%Y %H:%M') }}</strong> —
+        {{ h.action }} (by {{ h.user.name }})
+    </li>
+    {% else %}
+    <li class="list-group-item">No history yet.</li>
+    {% endfor %}
+</ul>
+
+<h5>Comments</h5>
+<ul class="list-group mb-3">
+    {% for c in comments %}
+    <li class="list-group-item">
+        <strong>{{ c.user.name }}</strong> ({{ c.created_at.strftime('%d-%b-%Y %H:%M') }}):
+        {{ c.comment }}
+    </li>
+    {% else %}
+    <li class="list-group-item">No comments yet.</li>
+    {% endfor %}
+</ul>
+
+<form method="POST">
+    <div class="mb-3">
+        <textarea name="comment" class="form-control" rows="2" placeholder="Add a comment..." required></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Add Comment</button>
+</form>
+{% endblock %}

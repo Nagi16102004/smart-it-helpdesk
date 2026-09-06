@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+{% block content %}
+<h3>All Tickets (Admin)</h3>
+
+<form method="GET" class="row g-2 mb-4">
+    <div class="col-md-2">
+        <input type="text" name="ticket_number" class="form-control" placeholder="Ticket #" value="{{ filters.ticket_number or '' }}">
+    </div>
+    <div class="col-md-2">
+        <input type="text" name="subject" class="form-control" placeholder="Subject" value="{{ filters.subject or '' }}">
+    </div>
+    <div class="col-md-2">
+        <select name="category" class="form-select">
+            <option value="">All Categories</option>
+            {% for c in ['Hardware','Software','Network','Account/Login','Email','Access/Permissions','Application','Other'] %}
+            <option value="{{ c }}" {% if filters.category == c %}selected{% endif %}>{{ c }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="col-md-2">
+        <select name="priority" class="form-select">
+            <option value="">All Priorities</option>
+            {% for p in ['P1','P2','P3','P4'] %}
+            <option value="{{ p }}" {% if filters.priority == p %}selected{% endif %}>{{ p }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="col-md-2">
+        <select name="status" class="form-select">
+            <option value="">All Statuses</option>
+            {% for s in ['Open','Assigned','In Progress','Resolved','Closed','Reopened'] %}
+            <option value="{{ s }}" {% if filters.status == s %}selected{% endif %}>{{ s }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="col-md-2">
+        <button type="submit" class="btn btn-primary w-100">Filter</button>
+    </div>
+</form>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Ticket #</th>
+            <th>Subject</th>
+            <th>Category</th>
+            <th>Priority</th>
+            <th>Status</th>
+            <th>Raised By</th>
+            <th>Assigned Agent</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for ticket in tickets %}
+        <tr>
+            <td>{{ ticket.ticket_number }}</td>
+            <td>{{ ticket.subject }}</td>
+            <td>{{ ticket.category }}</td>
+            <td>{{ ticket.priority }}</td>
+            <td>{{ ticket.status }}</td>
+            <td>{{ ticket.raised_by.name }}</td>
+            <td>
+                {% if ticket.assigned_agent %}
+                    {{ ticket.assigned_agent.name }}
+                {% else %}
+                    Not Assigned
+                {% endif %}
+            </td>
+            <td>
+                {% if not ticket.assigned_agent_id %}
+                <form method="POST" action="{{ url_for('assign_ticket', ticket_id=ticket.id) }}">
+                    <select name="agent_id" class="form-select form-select-sm mb-1" required>
+                        <option value="">Select Agent</option>
+                        {% for agent in agents %}
+                        <option value="{{ agent.id }}">{{ agent.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <button type="submit" class="btn btn-sm btn-primary">Assign</button>
+                </form>
+                {% else %}
+                    —
+                {% endif %}
+            </td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="8" class="text-center">No tickets found.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
